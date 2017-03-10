@@ -36,3 +36,6 @@
 
 # Output files
 *.rpt
+
+# VSCode
+.vscode

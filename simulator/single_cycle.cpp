@@ -1,3 +1,4 @@
+#include"single_cycle.h"
 #include<iostream>
 
 int main()
