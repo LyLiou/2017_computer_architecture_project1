@@ -33,7 +33,7 @@ void decode_iimage(unsigned int &pc, vector<Instruction> &ins_vec)
             num+=imem[i];
             num<<4;
         }
-        int pos=8;
+        int pos=16;
 
         while(num--){
             unsigned int opcode=(((unsigned int)(imem[pos])) << 2) + (unsigned int)(get_bits(imem[pos+1], 7, 6));
