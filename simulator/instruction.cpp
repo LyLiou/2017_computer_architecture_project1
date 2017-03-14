@@ -37,7 +37,8 @@ void decode_iimage(unsigned int &pc, vector<Instruction> &ins_vec)
 
         while(num--){
             unsigned int opcode=(((unsigned int)(imem[pos])) << 2) + (unsigned int)(get_bits(imem[pos+1], 7, 6));
-            if(opcode==)
+            
+            std::cout << opcode << std::endl;
             pos+=4;
         }
     }else cout << "Cannot open iimage.bin\n";
