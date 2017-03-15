@@ -1,10 +1,15 @@
+#pragma once
+#include<vector>
+class Instruction;
+void decode_iimage(unsigned int&);
+
 enum OPcode{
     add,
     addu,
     sub,
-    and,
-    or,
-    xor,
+    _and,
+    _or,
+    _xor,
     nor,
     nand,
     slt,
@@ -33,13 +38,13 @@ enum OPcode{
     beq,
     bne,
     j,
-    halt
-}
+    halt,
+    illegal
+};
 class Instruction{
     public:
-        Instruction(): opc(0), rs(0), rt(0), rd(0), shamt(0), funct(0);
-        instruct(Instruction, int, int);
-        Instruction(int opc, int rs, int rt, int rd, int shamt, int funct): opc(opc), rs(rs), rt(rt), rd(rd), shamt(shamt), funct(funct);
+        Instruction(): opc(illegal), rs(0), rt(0), rd(0), shamt(0), funct(0){}
+        Instruction(OPcode opcode, unsigned int rs, unsigned int rt, unsigned int rd, unsigned int shamt, unsigned int funct): opc(opcode), rs(rs), rt(rt), rd(rd), shamt(shamt), funct(funct){}
 
     private:
         OPcode opc;
@@ -50,4 +55,3 @@ class Instruction{
         unsigned int funct;
         unsigned int addr;
 };
-
