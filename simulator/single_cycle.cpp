@@ -7,13 +7,12 @@ int main()
 {
     std::cout << "hello archi......" << std::endl;
 
-    std::ifstream iimage("iimage.bin", std::ios::binary);
+    std::ifstream iimage("iimage.bin", std::ios::binary|std::ios::ate|std::ios::in);
     char* imem;
     unsigned int pc=0;
     unsigned int ins_num=0;
     
     if(iimage.is_open()){
-        iimage.seekg(0, std::ios::end);
         auto size=iimage.tellg();
         imem=new char [size];
         iimage.seekg(0, std::ios::beg);
