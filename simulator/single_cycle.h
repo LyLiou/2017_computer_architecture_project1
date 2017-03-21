@@ -5,6 +5,9 @@
 #include<iostream>
 class Instruction;
 Instruction decode_iimage(std::string &);
+char* read_file();
+unsigned int pc_init(char*);
+unsigned int get_num_inst(char*);
 
 enum OPcode{
     add,

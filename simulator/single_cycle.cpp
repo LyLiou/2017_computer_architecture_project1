@@ -1,54 +1,29 @@
 #include"single_cycle.h"
 #include<iostream>
-#include<fstream>
 #include<vector>
 
+
+unsigned int num_inst, pc;
+char* iimage;
 int main()
 {
     std::cout << "hello archi......" << std::endl;
 
-    std::ifstream iimage("iimage.bin", std::ios::binary|std::ios::ate|std::ios::in);
-    char* imem;
-    unsigned int pc=0;
-    unsigned int ins_num=0;
-    
-    if(iimage.is_open()){
-        auto size=iimage.tellg();
-        imem=new char [size];
-        iimage.seekg(0, std::ios::beg);
-        iimage.read(imem, size);
-        iimage.close();
-        
-        std::cout << "size:" << size << "\n";
-
-        for(int i=0;i<4;++i){
-            pc<<=8;
-            pc+=(unsigned int)(imem[i]);
-        }
-        std::cout << "pc:" << pc << "\n";
-        
-        for(int i=4;i<8;++i){
-            ins_num<<=8;
-            ins_num+=(unsigned int)(imem[i]);
-        }
-        std::cout << "Instruction num:" << ins_num << "\n";        
-        /*
-        while(num--){
-            auto opcode=(unsigned int)((unsigned char)(imem[pos])>>2);
-            
-            std::cout << std::hex << opcode << " ";
-            pos+=4;
-        }*/
-    }else std::cout << "Cannot open iimage.bin\n";
+    iimage=read_file();
+    pc=pc_init(iimage);
+    std::cout << "PC: " << pc << "\n";
+    num_inst=get_num_inst(iimage);
+    std::cout << "# of inst: " << num_inst << "\n";
     
     unsigned int pos=8;
     //std::string imems(imem);
     
-    for(unsigned int i=0;i<ins_num;++i){
+    for(unsigned int i=0;i<num_inst;++i){
         //std::string ins_src(imems, pos, 4);
         std::string ins_src;
-        for(int j=0;j<4;++j) ins_src.push_back(imem[pos]+j);
+        for(int j=0;j<4;++j) ins_src.push_back(iimage[pos]+j);
         Instruction ins_cur=decode_iimage(ins_src);
+        std::cout << i << " ";
         ins_cur.print();
         
         pos+=4;
