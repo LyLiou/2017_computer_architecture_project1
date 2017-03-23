@@ -68,12 +68,12 @@ class Instruction{
             funct=ins.funct;
         }*/
         void inst_decoder(uint&);
+        void set_pc(uint&);
         void print()
         {
             std::cout << 
             std::hex << 
-            //std::setw(5) << 
-            //std::setfill(' ') << 
+            std::uppercase <<
             this->name << "\t" << this->opc << "\t" << this->type << "\t" << this->rs << "\t" << this->rt << "\t" << this->rd << "\t" << this->C << "\t" << this->funct << 
             std::dec << std::endl;
             //std::cout << this->name;
