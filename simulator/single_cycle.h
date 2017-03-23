@@ -3,11 +3,15 @@
 #include<string>
 #include<iomanip>
 #include<iostream>
+#include<cstdint>
+
+#define int int32_t
+#define uint uint32_t
+#define uchar unsigned char
+
 class Instruction;
 Instruction decode_iimage(std::string &);
-char* read_file();
-unsigned int pc_init(char*);
-unsigned int get_num_inst(char*);
+void read_file(std::vector<uint>&, uint&, uint&);
 
 enum OPcode{
     add,
@@ -50,7 +54,7 @@ enum OPcode{
 class Instruction{
     public:
         Instruction(): name(illegal), opc(0), rs(0), rt(0), rd(0), shamt(0), funct(0), addr(0){}
-        Instruction(OPcode name, unsigned int opc, unsigned int rs, unsigned int rt, unsigned int rd, unsigned int shamt, unsigned int funct, unsigned int addr): name(name), opc(opc), rs(rs), rt(rt), rd(rd), shamt(shamt), funct(funct), addr(addr){}
+        Instruction(OPcode name, uint opc, uint rs, uint rt, uint rd, uint shamt, uint funct, uint addr): name(name), opc(opc), rs(rs), rt(rt), rd(rd), shamt(shamt), funct(funct), addr(addr){}
         /*Instruction(Instruction&& ins)
         {
             opc=ins.opc;
@@ -71,11 +75,11 @@ class Instruction{
         }
     private:
         OPcode name;
-        unsigned int opc;
-        unsigned int rs;
-        unsigned int rt;
-        unsigned int rd;
-        unsigned int shamt;
-        unsigned int funct;
-        unsigned int addr;
+        uint opc;
+        uint rs;
+        uint rt;
+        uint rd;
+        uint shamt;
+        uint funct;
+        uint addr;
 };
