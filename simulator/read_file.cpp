@@ -2,7 +2,7 @@
 #include<fstream>
 #include<vector>
 
-void read_file(std::vector<uint>& iimage, uint& pc, uint& num_inst){
+void read_file(std::vector<uint>& iimage, uint& pc, uint& amt_inst){
     std::ifstream ifile("iimage.bin", std::ios::binary|std::ios::ate|std::ios::in);
     
     char* iimage_char;
@@ -21,10 +21,10 @@ void read_file(std::vector<uint>& iimage, uint& pc, uint& num_inst){
             pc<<=8;
             pc+=iimage_char[i];
         }
-        num_inst=0;
+        amt_inst=0;
         for(int i=4;i<8;++i){
-            num_inst<<=8;
-            num_inst+=iimage_char[i];
+            amt_inst<<=8;
+            amt_inst+=iimage_char[i];
         }
         uint temp;
         iimage.clear();
