@@ -31,9 +31,6 @@
 *.out
 *.app
 
-# Test files
-*.bin
-
 # Output files
 *.rpt
 

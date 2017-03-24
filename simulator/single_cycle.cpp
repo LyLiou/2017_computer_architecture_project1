@@ -4,7 +4,7 @@
 #include<iomanip>
 #include<bitset>
 
-uint amt_inst, pc, pc_init,  num_inst;
+uint amt_inst, pc, pc_init, cycle;
 uint raw_inst;
 std::vector<uint> iimage;
 Instruction cur_inst;
@@ -21,7 +21,9 @@ int main()
     std::cout << "# of inst: " << amt_inst << " " << iimage.size() << "\n";
     
     pc=pc_init;
-    num_inst=0;
+    cycle=0;
+    
+    
     for(uint i=0;i<amt_inst;++i){// todo: should take next inst by pc
         raw_inst=iimage[i];
         //std::bitset<32> x(raw_inst);
@@ -29,10 +31,11 @@ int main()
         Instruction temp;
         cur_inst=temp;
         cur_inst.inst_decoder(raw_inst);//get information of a inst
-        
         cur_inst.print();
         
-        cur_inst.set_pc(pc);//decide next inst
+        
+        
+        //cur_inst.set_pc(pc);//decide next inst
     }
     
     return 0;
