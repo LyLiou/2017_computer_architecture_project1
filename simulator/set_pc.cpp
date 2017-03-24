@@ -3,7 +3,7 @@
 
 void Instruction::set_pc(uint& pc)
 {
-    switch(this->type){
+    /*switch(this->type){
         case 'R':
             if(this->name=="jr"){
                 pc+=4;
@@ -35,5 +35,5 @@ void Instruction::set_pc(uint& pc)
             break;
         default:
             break;
-    }
+    }*/
 }

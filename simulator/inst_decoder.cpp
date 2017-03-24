@@ -1,4 +1,47 @@
 #include"single_cycle.h"
+#include<string>
+
+Reg map_reg(uint r)
+{
+    std::string s;
+    switch(r){
+        case 0: s="$zero"; break;
+        case 1: s="$at"; break;
+        case 2: s="$v0"; break;
+        case 3: s="$v1"; break;
+        case 4: s="$a0"; break;
+        case 5: s="$a1"; break;
+        case 6: s="$a2"; break;
+        case 7: s="$a3"; break;
+        case 8: s="$t0"; break;
+        case 9: s="$t1"; break;
+        case 10: s="$t2"; break;
+        case 11: s="$t3"; break;
+        case 12: s="$t4"; break;
+        case 13: s="$t5"; break;
+        case 14: s="$t6"; break;
+        case 15: s="$t7"; break;
+        case 16: s="$s0"; break;
+        case 17: s="$s1"; break;
+        case 18: s="$s2"; break;
+        case 19: s="$s3"; break;
+        case 20: s="$s4"; break;
+        case 21: s="$s5"; break;
+        case 22: s="$s6"; break;
+        case 23: s="$s7"; break;
+        case 24: s="$t8"; break;
+        case 25: s="$t9"; break;
+        case 26: s="$k0"; break;
+        case 27: s="$k1"; break;
+        case 28: s="$gp"; break;
+        case 29: s="$sp"; break;
+        case 30: s="$fp"; break;
+        case 31: s="$ra"; break;
+        default: s=""; break;
+    }
+    Reg reg(s, r);
+    return reg;
+}
 
 void Instruction::inst_decoder(uint& raw_inst)
 {
@@ -28,7 +71,7 @@ void Instruction::inst_decoder(uint& raw_inst)
                 default: this->name="illegal"; break;
             }
             break;
-        case 0x08: this->name="addiu"; type='I';break;
+        case 0x08: this->name="addi"; type='I';break;
         case 0x09: this->name="addiu"; type='I';break;
         case 0x23: this->name="lw";    type='I';break;
         case 0x21: this->name="lh";    type='I';break;
@@ -54,14 +97,14 @@ void Instruction::inst_decoder(uint& raw_inst)
     
     switch(this->type){
         case 'R':
-            this->rs=(raw_inst<<6)>>27;
-            this->rt=(raw_inst<<11)>>27;
-            this->rd=(raw_inst<<16)>>27;
+            this->rs=map_reg((raw_inst<<6)>>27);
+            this->rt=map_reg((raw_inst<<11)>>27);
+            this->rd=map_reg((raw_inst<<16)>>27);
             this->C=(raw_inst<<21)>>27;
             break;
         case 'I':
-            this->rs=(raw_inst<<6)>>27;
-            this->rt=(raw_inst<<11)>>27;
+            this->rs=map_reg((raw_inst<<6)>>27);
+            this->rt=map_reg((raw_inst<<11)>>27);
             this->C=(raw_inst<<16)>>16;
             break;
         case 'J':

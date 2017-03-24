@@ -11,9 +11,52 @@
 #define uchar unsigned char
 
 class Instruction;
+class Reg;
 Instruction decode_iimage(std::string &);
 void read_file(std::vector<uint>&, uint&, uint&);
 
+class Reg{
+    friend class Instruction;
+    public:
+        Reg(): name(""), num(0){}
+        Reg(std::string name, uint num): name(name), num(num){}
+    private:
+        std::string name;
+        uint num;
+};
+
+class Instruction{
+    public:
+        Instruction(): name(""), type('X'), opc(0), C(0), funct(0){
+            Reg reg;
+            rs=reg;
+            rt=reg;
+            rd=reg;
+        }
+        Instruction(std::string name, char type, uint opc, Reg rs, Reg rt, Reg rd, uint C, uint funct): name(name), type(type), opc(opc), rs(rs), rt(rt), rd(rd), C(C), funct(funct){}
+        void inst_decoder(uint&);
+        void set_pc(uint&);
+        void print()
+        {
+            std::cout << 
+            std::hex << 
+            std::uppercase <<
+            this->name << "\t" << this->opc << "\t" << this->type << "\t" << this->rs.name << "\t" << this->rt.name << "\t" << this->rd.name << "\t" << this->C << "\t" << this->funct << 
+            std::dec << std::endl;
+            //std::cout << this->name;
+            //printf("%5X%2c\n", this->opc, this->type);
+        }
+    private:
+        //OPcode name;
+        std::string name;
+        char type;
+        uint opc;
+        Reg rs;
+        Reg rt;
+        Reg rd;
+        uint C;
+        uint funct;
+};
 /*enum OPcode{
     add,
     addu,
@@ -55,38 +98,3 @@ void read_file(std::vector<uint>&, uint&, uint&);
     halt,
     illegal
 };*/
-class Instruction{
-    public:
-        Instruction(): name(""), type('X'), opc(0), rs(0), rt(0), rd(0), C(0), funct(0){}
-        Instruction(std::string name, char type, uint opc, uint rs, uint rt, uint rd, uint C, uint funct): name(name), type(type), opc(opc), rs(rs), rt(rt), rd(rd), C(C), funct(funct){}
-        /*Instruction(Instruction&& ins)
-        {
-            opc=ins.opc;
-            rt=ins.rt;
-            rd=ins.rd;
-            shamt=ins.shamt;
-            funct=ins.funct;
-        }*/
-        void inst_decoder(uint&);
-        void set_pc(uint&);
-        void print()
-        {
-            std::cout << 
-            std::hex << 
-            std::uppercase <<
-            this->name << "\t" << this->opc << "\t" << this->type << "\t" << this->rs << "\t" << this->rt << "\t" << this->rd << "\t" << this->C << "\t" << this->funct << 
-            std::dec << std::endl;
-            //std::cout << this->name;
-            //printf("%5X%2c\n", this->opc, this->type);
-        }
-    private:
-        //OPcode name;
-        std::string name;
-        char type;
-        uint opc;
-        uint rs;
-        uint rt;
-        uint rd;
-        uint C;
-        uint funct;
-};
