@@ -9,55 +9,129 @@ void Instruction::read_reg(uint& rs, uint& rt, std::vector<uint> regs)
     }else return;
 }
 
-void Instruction::alu(uint rs, uint rt, uint& output, uint& HI, uint& LO, uint& pc, uint& data_addr)
+void Instruction::alu(uint rs, uint rt, bool& w_enable, uint& output, uint& HI, uint& LO, uint& pc, uint& data_addr)
 {
     uint next_pc=pc+4;
     int imm=int(this->C); imm<<=16; imm>>=16;
-    if(this->name=="add")  output=rs+rt;
-    else if(this->name=="addu") output=rs+rt;//todo: check out what happen
-    else if(this->name=="sub")  output=rs-rt;
-    else if(this->name=="and_") output=rs&rt;
-    else if(this->name=="or_")  output=rs|rt;
-    else if(this->name=="xor_") output=rs^rt;
-    else if(this->name=="nor")  output=~(rs|rt);
-    else if(this->name=="nand") output=~(rs&rt);
-    else if(this->name=="slt")  output=(rs<rt) ? 1 : 0;
-    else if(this->name=="sll")  output=rt<<this->C;
-    else if(this->name=="srl")  output=rt>>this->C;
-    else if(this->name=="sra")  output=int(rt)>>this->C;
-    else if(this->name=="jr")   next_pc=rs;
-    else if(this->name=="mult"){
+    if(this->name=="add"){
+        output=rs+rt;
+        w_enable=true;
+    }else if(this->name=="addu"){
+        output=rs+rt;//todo: check out what happen
+        w_enable=true;
+    }else if(this->name=="sub"){
+        output=rs-rt;
+        w_enable=true;
+    }else if(this->name=="and_"){
+        output=rs&rt;
+        w_enable=true;
+    }else if(this->name=="or_"){
+        output=rs|rt;
+        w_enable=true;
+    }else if(this->name=="xor_"){
+        output=rs^rt;
+        w_enable=true;
+    }else if(this->name=="nor"){
+        output=~(rs|rt);
+        w_enable=true;
+    }else if(this->name=="nand"){
+        output=~(rs&rt);
+        w_enable=true;
+    }else if(this->name=="slt"){
+        output=(rs<rt) ? 1 : 0;
+        w_enable=true;
+    }else if(this->name=="sll"){
+        output=rt<<this->C;
+        w_enable=true;
+    }else if(this->name=="srl"){
+        output=rt>>this->C;
+        w_enable=true;
+    }else if(this->name=="sra"){
+        output=int(rt)>>this->C;
+        w_enable=true;
+    }else if(this->name=="jr"){
+        next_pc=rs;
+        w_enable=false;
+    }else if(this->name=="mult"){
         uint64_t ans=uint64_t(int64_t(int(rs))*int64_t(int(rt)));
         HI=uint(ans>>32);
         LO=uint(ans);
-    }
-    else if(this->name=="multu"){
+        w_enable=false;
+    }else if(this->name=="multu"){
         uint64_t ans=uint64_t(rs)*uint64_t(rt);
         HI=uint(ans>>32);
         LO=uint(ans);
+        w_enable=false;
+    }else if(this->name=="mfhi"){
+        output=HI;//should set flag for HILO error
+        w_enable=true;
+    }else if(this->name=="mflo") {
+        output=LO;
+        w_enable=true;
+    }else if(this->name=="addi") {
+        output=rs+imm;
+        w_enable=true;
+    }else if(this->name=="addiu"){
+        output=rs+imm; //todo: check out what happen
+        w_enable=true;
+    }else if(this->name=="lw")   {
+        data_addr=rs+imm;
+        w_enable=true;
+    }else if(this->name=="lh")   {
+        data_addr=rs+imm;
+        w_enable=true;
+    }else if(this->name=="lhu")  {
+        data_addr=rs+imm;
+        w_enable=true;
+    }else if(this->name=="lb")   {
+        data_addr=rs+imm;
+        w_enable=true;
+    }else if(this->name=="lbu")  {
+        data_addr=rs+imm;
+        w_enable=true;
+    }else if(this->name=="sw")   {
+        data_addr=rs+imm;
+        output=rt;
+        w_enable=false;
+    }else if(this->name=="sh")   {
+        data_addr=rs+imm;
+        output=rt&0x0000ffff;
+        w_enable=false;
+    }else if(this->name=="sb")   {
+        data_addr=rs+imm;
+        output=rt&0x000000ff;
+        w_enable=false;
+    }else if(this->name=="lui")  {
+        output=this->C<<16;
+        w_enable=true;
+    }else if(this->name=="andi") {
+        output=rs&this->C;
+        w_enable=true;
+    }else if(this->name=="ori")  {
+        output=rs|this->C;
+        w_enable=true;
+    }else if(this->name=="nori") {
+        output=~(rs|this->C);
+        w_enable=true;
+    }else if(this->name=="slti") {
+        output=int(rs)<imm ? 1 : 0;
+        w_enable=true;
+    }else if(this->name=="beq")  {
+        next_pc=(rs==rt) ? pc+4+4*imm : pc+4;
+        w_enable=false;
+    }else if(this->name=="bne")  {
+        next_pc=(rs!=rt) ? pc+4+4*imm : pc+4;
+        w_enable=false;
+    }else if(this->name=="bgtz") {
+        next_pc=(rs>0) ? pc+4+4*imm : pc+4;
+        w_enable=false;
+    }else if(this->name=="j")    {
+        next_pc=((pc+4)&0xf0000000)+(this->C<<2);
+        w_enable=false;
+    }else if(this->name=="jal")  {
+        next_pc=((pc+4)&0xf0000000)+(this->C<<2); output=pc+4;
+        w_enable=false;
     }
-    else if(this->name=="mfhi") output=HI;//should set flag for HILO error
-    else if(this->name=="mflo") output=LO;
-    else if(this->name=="addi") output=rs+imm;
-    else if(this->name=="addiu")output=rs+imm; //todo: check out what happen
-    else if(this->name=="lw")   data_addr=rs+imm;
-    else if(this->name=="lh")   data_addr=rs+imm;
-    else if(this->name=="lhu")  data_addr=rs+imm;
-    else if(this->name=="lb")   data_addr=rs+imm;
-    else if(this->name=="lbu")  data_addr=rs+imm;
-    else if(this->name=="sw")   {data_addr=rs+imm; output=rt;}
-    else if(this->name=="sh")   {data_addr=rs+imm; output=rt&0x0000ffff;}
-    else if(this->name=="sb")   {data_addr=rs+imm; output=rt&0x000000ff;}
-    else if(this->name=="lui")  output=this->C<<16;
-    else if(this->name=="andi") output=rs&this->C;
-    else if(this->name=="ori")  output=rs|this->C;
-    else if(this->name=="nori") output=~(rs|this->C);
-    else if(this->name=="slti") output=int(rs)<imm ? 1 : 0;
-    else if(this->name=="beq")  next_pc=(rs==rt) ? pc+4+4*imm : pc+4;
-    else if(this->name=="bne")  next_pc=(rs!=rt) ? pc+4+4*imm : pc+4;
-    else if(this->name=="bgtz") next_pc=(rs>0) ? pc+4+4*imm : pc+4;
-    else if(this->name=="j")    next_pc=((pc+4)&0xf0000000)+(this->C<<2);
-    else if(this->name=="jal")  next_pc=((pc+4)&0xf0000000)+(this->C<<2); output=pc+4;
     //else if(this->name=="halt") 
     pc=next_pc;
 }
@@ -101,4 +175,21 @@ void Instruction::data_rw(uint data_addr, uint& to_write, std::vector<unsigned c
     }else if(this->name=="sb"){
         dimage[data_addr]=(unsigned char)((to_write<<24)>>24);
     }
+}
+
+void Instruction::write_reg(bool w_enable, uint to_write, std::vector<uint>& regs)
+{
+    uint reg_num;
+    if(this->name=="mult" || this->name=="multu"){
+        //todo: report change LO HI
+        return;
+    }else if(!w_enable){
+        return;
+    }else{
+        if(this->type=='R') reg_num=this->rd.num;
+        else if(this->type=='I') reg_num=this->rt.num;
+        regs[reg_num]=to_write;
+        
+        return;
+    }    
 }

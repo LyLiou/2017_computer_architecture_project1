@@ -9,6 +9,7 @@ uint sp_init;
 uint raw_inst;//inst in bin
 uint rs_value, rt_value, rd_value;
 uint to_write, HI, LO, data_addr;
+bool w_enable;
 std::vector<uint> iimage; //all inst in bin
 std::vector<unsigned char> dimage; //all data in bin
 std::vector<uint> reg_arr; //all 32 reg
@@ -43,9 +44,9 @@ int main()
         
         //cur_inst.read_reg(rs_value, rt_value, reg_arr);
         
-        //cur_inst.alu(rs_value, rt_value, to_write, HI, LO, pc, data_addr);
+        //cur_inst.alu(rs_value, rt_value, w_enable, to_write, HI, LO, pc, data_addr);
         //cur_inst.data_rw(data_addr, to_write, dimage);
-        //cur_inst.write_reg(to_write, reg_arr);
+        //cur_inst.write_reg(w_enable, to_write, reg_arr);
         
         //cur_inst.set_pc(cur_pc);//decide next inst
     }

@@ -36,9 +36,9 @@ class Instruction{
         Instruction(std::string name, char type, uint opc, Reg rs, Reg rt, Reg rd, uint C, uint funct): name(name), type(type), opc(opc), rs(rs), rt(rt), rd(rd), C(C), funct(funct){}
         void inst_decoder(uint&);
         void read_reg(uint&, uint&, std::vector<uint>);
-        void alu(uint, uint, uint&, uint&, uint&, uint&, uint&);
+        void alu(uint, uint, bool&, uint&, uint&, uint&, uint&, uint&);
         void data_rw(uint, uint&, std::vector<unsigned char>&);
-        void write_reg(uint, std::vector<uint>&);
+        void write_reg(bool, uint, std::vector<uint>&);
         void set_pc(uint&);
         void print()
         {
