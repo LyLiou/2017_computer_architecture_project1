@@ -5,6 +5,7 @@
 #include<iostream>
 #include<cstdint>
 #include<cstdio>
+#include<sstream>
 
 #define int int32_t
 #define uint uint32_t
@@ -36,9 +37,9 @@ class Instruction{
         Instruction(std::string name, char type, uint opc, Reg rs, Reg rt, Reg rd, uint C, uint funct): name(name), type(type), opc(opc), rs(rs), rt(rt), rd(rd), C(C), funct(funct){}
         void inst_decoder(uint&);
         void read_reg(uint&, uint&, std::vector<uint>);
-        void alu(uint, uint, bool&, uint&, uint&, uint&, uint&, uint&);
-        void data_rw(uint, uint&, std::vector<unsigned char>&);
-        void write_reg(bool, uint, uint, uint, std::vector<uint>&);
+        void alu(uint, uint, bool&, uint&, uint&, uint&, uint&, uint&, bool&, bool&, bool&, bool&);
+        void data_rw(uint, uint&, std::vector<unsigned char>&, bool&, bool&);
+        void write_reg(bool, bool&, uint, uint, uint, std::vector<uint>&, std::stringstream&, std::stringstream&);
         bool halt(){
             return this->name=="halt";
         }

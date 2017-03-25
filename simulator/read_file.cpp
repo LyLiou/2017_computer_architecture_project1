@@ -29,13 +29,14 @@ void read_file(std::vector<unsigned char>& dimage, uint& sp, std::vector<uint>& 
         }
         uint temp;
         iimage.clear();
+        for(int i=0;i<256;++i) iimage.push_back(0);
         for(int i=8;i<size;i+=4){
             temp=0;
             for(int j=i;j<i+4;++j){
                 temp<<=8;
                 temp+=(uint)((unsigned char)(iimage_char[j]));
             }
-            iimage.push_back(temp);
+            iimage[(pc+i-8)/4]=temp;
         }
     }else std::cout << "Cannot open iimage.bin\n";
     

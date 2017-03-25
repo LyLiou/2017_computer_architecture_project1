@@ -8,7 +8,7 @@ OBJS := $(patsubst %.cpp, %.o, $(wildcard *.cpp))
 
 single_cycle: $(OBJS)
 	$(CC) -o single_cycle $(OBJS)
-%.o: %.cpp $(HEADER)
+%.o: $(HEADER) %.cpp
 	$(CC) $(FLAGS) -c $^
 
 clean:
