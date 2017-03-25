@@ -32,24 +32,24 @@ int main()
     cur_pc=init_pc;
     cycle=0;
     
-    
     for(uint i=0;i<amt_inst;++i){// todo: should take next inst by pc
-        raw_inst=iimage[i];
+        raw_inst=iimage[(cur_pc-init_pc)/4];
         //std::bitset<32> x(raw_inst);
         //std::cout << x << "\n";
         Instruction temp;
         cur_inst=temp;
         cur_inst.inst_decoder(raw_inst);//get information of a inst
-        cur_inst.print();
+        //cur_inst.print();
         
-        //cur_inst.read_reg(rs_value, rt_value, reg_arr);
+        if(cur_inst.halt()) break;
+        ++cycle;
+        std::cout << "cycle: " << cycle << "\n";
         
-        //cur_inst.alu(rs_value, rt_value, w_enable, to_write, HI, LO, pc, data_addr);
-        //cur_inst.data_rw(data_addr, to_write, dimage);
-        //cur_inst.write_reg(w_enable, to_write, reg_arr);
-        
-        //cur_inst.set_pc(cur_pc);//decide next inst
+        cur_inst.read_reg(rs_value, rt_value, reg_arr);
+        cur_inst.alu(rs_value, rt_value, w_enable, to_write, HI, LO, cur_pc, data_addr);
+        cur_inst.data_rw(data_addr, to_write, dimage);
+        cur_inst.write_reg(w_enable, to_write, HI, LO, reg_arr);
+        std::cout << "PC: " << std::hex << cur_pc << std::dec << "\n\n";
     }
-    
     return 0;
 }

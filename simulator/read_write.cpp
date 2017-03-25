@@ -177,17 +177,29 @@ void Instruction::data_rw(uint data_addr, uint& to_write, std::vector<unsigned c
     }
 }
 
-void Instruction::write_reg(bool w_enable, uint to_write, std::vector<uint>& regs)
+void Instruction::write_reg(bool w_enable, uint to_write, uint HI, uint LO, std::vector<uint>& regs)
 {
     uint reg_num;
     if(this->name=="mult" || this->name=="multu"){
-        //todo: report change LO HI
+        if(regs[32]!=HI){
+            std::cout << "HI " << std::hex << HI << std::dec << "\n";
+        }
+        if(regs[33]!=LO){
+            std::cout << "LO " << std::hex << LO << std::dec << "\n";
+        }
+        regs[32]=HI;
+        regs[33]=LO;
         return;
     }else if(!w_enable){
         return;
     }else{
         if(this->type=='R') reg_num=this->rd.num;
         else if(this->type=='I') reg_num=this->rt.num;
+        if(reg_num==0){
+            return;//error
+        }else if(regs[reg_num]!=to_write){
+            std::cout << reg_num << " " << std::hex << to_write << std::dec << "\n"; 
+        }
         regs[reg_num]=to_write;
         return;
     }    

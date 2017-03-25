@@ -8,7 +8,7 @@
 
 #define int int32_t
 #define uint uint32_t
-#define REG_AMT 32
+#define REG_AMT 34
 
 class Instruction;
 class Reg;
@@ -38,8 +38,10 @@ class Instruction{
         void read_reg(uint&, uint&, std::vector<uint>);
         void alu(uint, uint, bool&, uint&, uint&, uint&, uint&, uint&);
         void data_rw(uint, uint&, std::vector<unsigned char>&);
-        void write_reg(bool, uint, std::vector<uint>&);
-        void set_pc(uint&);
+        void write_reg(bool, uint, uint, uint, std::vector<uint>&);
+        bool halt(){
+            return this->name=="halt";
+        }
         void print()
         {
             std::cout << 
