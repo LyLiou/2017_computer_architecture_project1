@@ -39,7 +39,7 @@ class Instruction{
         void read_reg(uint&, uint&, std::vector<uint>);
         void alu(uint, uint, bool&, uint&, uint&, uint&, uint&, uint&, bool&, bool&, bool&, bool&);
         void data_rw(uint, uint&, std::vector<unsigned char>&, bool&, bool&);
-        void write_reg(bool, bool&, uint, uint, uint, std::vector<uint>&, std::stringstream&, std::stringstream&);
+        void write_reg(bool, bool&, uint, uint, uint, std::vector<uint>&, std::stringstream&);
         bool halt(){
             return this->name=="halt";
         }

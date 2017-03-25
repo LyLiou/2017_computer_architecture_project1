@@ -15,7 +15,7 @@ void read_file(std::vector<unsigned char>& dimage, uint& sp, std::vector<uint>& 
         ifile.read(iimage_char, size);
         ifile.close();
         
-        std::cout << "i size:" << size << "\n";
+        //std::cout << "i size:" << size << "\n";
         
         pc=0;
         for(int i=0;i<4;++i){
@@ -50,7 +50,7 @@ void read_file(std::vector<unsigned char>& dimage, uint& sp, std::vector<uint>& 
         dfile.read(dimage_char, size2);
         dfile.close();
         
-        std::cout << "d size:" << size2 << "\n";
+        //std::cout << "d size:" << size2 << "\n";
         
         sp=0;
         for(int i=0;i<4;++i){
@@ -63,8 +63,8 @@ void read_file(std::vector<unsigned char>& dimage, uint& sp, std::vector<uint>& 
             amt_data+=(uint)((unsigned char)(dimage_char[i]));
         }
         amt_data*=4;
-        std::cout << "sp: " << sp << "\n";
-        std::cout << "#data_byte: " << amt_data << "\n";
+        //std::cout << "sp: " << sp << "\n";
+        //std::cout << "#data_byte: " << amt_data << "\n";
         dimage.clear();
         for(int i=0;i<1024;++i) dimage.push_back('\0');
         for(int i=8;i<size2;++i){

@@ -243,16 +243,16 @@ void Instruction::data_rw(uint data_addr, uint& to_write, std::vector<unsigned c
     }
 }
 
-void Instruction::write_reg(bool w_enable, bool& e1, uint to_write, uint HI, uint LO, std::vector<uint>& regs, std::stringstream& snap, std::stringstream& err)
+void Instruction::write_reg(bool w_enable, bool& e1, uint to_write, uint HI, uint LO, std::vector<uint>& regs, std::stringstream& snap)
 {
     uint reg_num;
     if(this->name=="mult" || this->name=="multu"){
         if(regs[32]!=HI){
-            std::cout << "HI " << std::hex << HI << std::dec << "\n";
+            //std::cout << "HI " << std::hex << HI << std::dec << "\n";
             snap << "$HI: 0x" << std::hex << std::setw(8) << std::setfill('0') << HI << std::dec << "\n";
         }
         if(regs[33]!=LO){
-            std::cout << "LO " << std::hex << LO << std::dec << "\n";
+            //std::cout << "LO " << std::hex << LO << std::dec << "\n";
             snap << "$LO: 0x" << std::hex << std::setw(8) << std::setfill('0') << LO << std::dec << "\n";
         }
         regs[32]=HI;
@@ -268,7 +268,7 @@ void Instruction::write_reg(bool w_enable, bool& e1, uint to_write, uint HI, uin
             e1=true;
             return;
         }else if(regs[reg_num]!=to_write){
-            std::cout << reg_num << " " << std::hex << to_write << std::dec << "\n";
+            //std::cout << reg_num << " " << std::hex << to_write << std::dec << "\n";
             snap << "$" << std::setw(2) << std::setfill('0') << reg_num << ": 0x" << std::hex << std::setw(8) << std::uppercase << to_write << std::dec << "\n";
         }
         regs[reg_num]=to_write;
