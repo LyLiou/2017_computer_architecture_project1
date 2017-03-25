@@ -8,13 +8,12 @@
 
 #define int int32_t
 #define uint uint32_t
-#define uchar unsigned char
 #define REG_AMT 32
 
 class Instruction;
 class Reg;
 Instruction decode_iimage(std::string &);
-void read_file(std::vector<uint>&, uint&, uint&);
+void read_file(std::vector<unsigned char>&, uint&, std::vector<uint>&, uint&, uint&);
 
 class Reg{
     friend class Instruction;
@@ -38,6 +37,8 @@ class Instruction{
         void inst_decoder(uint&);
         void read_reg(uint&, uint&, std::vector<uint>);
         void alu(uint, uint, uint&, uint&, uint&, uint&, uint&);
+        void data_rw(uint, uint&, std::vector<unsigned char>&);
+        void write_reg(uint, std::vector<uint>&);
         void set_pc(uint&);
         void print()
         {
