@@ -4,23 +4,29 @@
 #include<iomanip>
 #include<bitset>
 
-uint amt_inst, pc, pc_init, cycle;
-uint raw_inst;
-std::vector<uint> iimage;
-Instruction cur_inst;
+uint amt_inst, cur_pc, init_pc, cycle;//amount of inst, pc now, pc first, cycle now
+uint raw_inst;//inst in bin
+uint rs_value, rt_value, rd_value, alu_output, HI, LO, data_addr;
+std::vector<uint> iimage; //all inst in bin
+std::vector<uint> dimage; //all data in bin
+std::vector<uint> reg_arr; //all 32 reg
+Instruction cur_inst;//inst in class
+
+//int memr, memw, regw, jump;
+//determine whether or not to read/write d-memory, to write reg, to jump
+//-1 -> no need
 
 int main()
 {
     std::cout << "hello archi......" << std::endl;
 
-    read_file(iimage, pc_init, amt_inst);//read iimage.bin, get initial pc, #inst
+    read_file(iimage, init_pc, amt_inst);//read iimage.bin, get initial pc, #inst
     
-    //pc=pc_init(iimage[0]);
-    std::cout << std::hex << "PC: " << pc_init << "\n" << std::dec;
-    //amt_inst=get_amt_inst(iimage[0]);
+    std::cout << std::hex << "PC: " << init_pc << "\n" << std::dec;
     std::cout << "# of inst: " << amt_inst << " " << iimage.size() << "\n";
     
-    pc=pc_init;
+    for(int i=0;i<REG_AMT;++i) reg_arr.push_back(0);//init regs
+    cur_pc=init_pc;
     cycle=0;
     
     
@@ -33,9 +39,12 @@ int main()
         cur_inst.inst_decoder(raw_inst);//get information of a inst
         cur_inst.print();
         
+        cur_inst.read_reg(rs_value, rt_value, reg_arr);
         
+        cur_inst.alu(rs_value, rt_value, alu_output, HI, LO, pc, data_addr);
+        cur_inst.
         
-        //cur_inst.set_pc(pc);//decide next inst
+        //cur_inst.set_pc(cur_pc);//decide next inst
     }
     
     return 0;

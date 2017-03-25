@@ -9,6 +9,7 @@
 #define int int32_t
 #define uint uint32_t
 #define uchar unsigned char
+#define REG_AMT 32
 
 class Instruction;
 class Reg;
@@ -35,6 +36,8 @@ class Instruction{
         }
         Instruction(std::string name, char type, uint opc, Reg rs, Reg rt, Reg rd, uint C, uint funct): name(name), type(type), opc(opc), rs(rs), rt(rt), rd(rd), C(C), funct(funct){}
         void inst_decoder(uint&);
+        void read_reg(uint&, uint&, std::vector<uint>);
+        void alu(uint, uint, uint&, uint&, uint&, uint&, uint&);
         void set_pc(uint&);
         void print()
         {
