@@ -189,7 +189,6 @@ void Instruction::write_reg(bool w_enable, uint to_write, std::vector<uint>& reg
         if(this->type=='R') reg_num=this->rd.num;
         else if(this->type=='I') reg_num=this->rt.num;
         regs[reg_num]=to_write;
-        
         return;
     }    
 }
