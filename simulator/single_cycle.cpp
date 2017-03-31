@@ -16,7 +16,7 @@ uint HI, LO;//HI LO value, change if mult
 uint data_addr;//d_memory address to write in
 bool w_enable;//whether or not register can be written(write_enable)
 bool e1, e2, e3, e4, e5;//5 error flags
-bool HI_w_enable, LO_w_enable;//before/after mfhi/mflo
+bool HI_LO_w_enable;//before/after mfhi/mflo
 std::vector<uint> iimage; //all inst in binary
 std::vector<unsigned char> dimage; //all data in binary
 std::vector<uint> reg_arr; //all 32 register
@@ -39,8 +39,7 @@ int main()
     reg_arr[29]=init_sp;//set sp
     cur_pc=init_pc;
     cycle=0;
-    HI_w_enable=true;
-    LO_w_enable=true;
+    HI_LO_w_enable=true;
     
     //print cycle 0
     snap << "cycle " << cycle << "\n";
@@ -83,7 +82,7 @@ int main()
         //read reg value from address in inst
         cur_inst.read_reg(reg_arr, rs_value, rt_value);
         
-        cur_inst.alu(rs_value, rt_value, to_write, HI, LO, cur_pc, data_addr, w_enable, e2, e3, HI_w_enable, LO_w_enable);
+        cur_inst.alu(rs_value, rt_value, to_write, HI, LO, cur_pc, data_addr, w_enable, e2, e3, HI_LO_w_enable);
         
         cur_inst.data_rw(data_addr, to_write, dimage, e4, e5);
         

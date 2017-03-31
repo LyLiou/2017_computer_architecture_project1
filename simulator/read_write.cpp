@@ -9,7 +9,7 @@ void Instruction::read_reg(std::vector<uint> regs, uint& rs, uint& rt)
     }else return;
 }
 
-void Instruction::alu(uint rs, uint rt, uint& output, uint& HI, uint& LO, uint& pc, uint& data_addr, bool& w_enable, bool& e2, bool& e3, bool& HI_w, bool& LO_w)
+void Instruction::alu(uint rs, uint rt, uint& output, uint& HI, uint& LO, uint& pc, uint& data_addr, bool& w_enable, bool& e2, bool& e3, bool& HI_LO_w)
 {
     uint next_pc=pc+4;
     int imm=int(this->C); imm<<=16; imm>>=16;
@@ -58,25 +58,23 @@ void Instruction::alu(uint rs, uint rt, uint& output, uint& HI, uint& LO, uint& 
         uint64_t ans=uint64_t(int64_t(int(rs))*int64_t(int(rt)));
         HI=uint(ans>>32);
         LO=uint(ans);
-        if(!HI_w||!LO_w) e3=true;
-        HI_w=false;
-        LO_w=false;
+        if(!HI_LO_w) e3=true;
+        HI_LO_w=false;
         w_enable=false;
     }else if(this->name=="multu"){
         uint64_t ans=uint64_t(rs)*uint64_t(rt);
         HI=uint(ans>>32);
         LO=uint(ans);
-        if(!HI_w||!LO_w) e3=true;
-        HI_w=false;
-        LO_w=false;
+        if(!HI_LO_w) e3=true;
+        HI_LO_w=false;
         w_enable=false;
     }else if(this->name=="mfhi"){
         output=HI;
-        HI_w=true;
+        HI_LO_w=true;
         w_enable=true;
     }else if(this->name=="mflo") {
         output=LO;
-        LO_w=true;
+        HI_LO_w=true;
         w_enable=true;
     }else if(this->name=="addi") {
         output=rs+imm;
