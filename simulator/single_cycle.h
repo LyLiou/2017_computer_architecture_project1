@@ -36,22 +36,20 @@ class Instruction{
         }
         Instruction(std::string name, char type, uint opc, Reg rs, Reg rt, Reg rd, uint C, uint funct): name(name), type(type), opc(opc), rs(rs), rt(rt), rd(rd), C(C), funct(funct){}
         void inst_decoder(uint&);
-        void read_reg(uint&, uint&, std::vector<uint>);
-        void alu(uint, uint, bool&, uint&, uint&, uint&, uint&, uint&, bool&, bool&, bool&, bool&);
+        void read_reg(std::vector<uint>, uint&, uint&);
+        void alu(uint, uint, uint&, uint&, uint&, uint&, uint&, bool&, bool&, bool&, bool&, bool&);
         void data_rw(uint, uint&, std::vector<unsigned char>&, bool&, bool&);
-        void write_reg(bool, bool&, uint, uint, uint, std::vector<uint>&, std::stringstream&);
+        void write_reg(bool, uint, uint, uint, std::vector<uint>&, std::stringstream&, bool&);
         bool halt(){
             return this->name=="halt";
         }
-        void print()
+        void print()//to debug
         {
             std::cout << 
             std::hex << 
             std::uppercase <<
             this->name << "\t" << this->opc << "\t" << this->type << "\t" << this->rs.name << "\t" << this->rt.name << "\t" << this->rd.name << "\t" << this->C << "\t" << this->funct << 
             std::dec << std::endl;
-            //std::cout << this->name;
-            //printf("%5X%2c\n", this->opc, this->type);
         }
     private:
         //OPcode name;

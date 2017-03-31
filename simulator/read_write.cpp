@@ -1,6 +1,6 @@
 #include"single_cycle.h"
 
-void Instruction::read_reg(uint& rs, uint& rt, std::vector<uint> regs)
+void Instruction::read_reg(std::vector<uint> regs, uint& rs, uint& rt)
 {
     if(this->type=='R' || this->type=='I'){
         rs=regs[this->rs.num];
@@ -9,7 +9,7 @@ void Instruction::read_reg(uint& rs, uint& rt, std::vector<uint> regs)
     }else return;
 }
 
-void Instruction::alu(uint rs, uint rt, bool& w_enable, uint& output, uint& HI, uint& LO, uint& pc, uint& data_addr, bool& e2, bool& e3, bool& HI_w, bool& LO_w)
+void Instruction::alu(uint rs, uint rt, uint& output, uint& HI, uint& LO, uint& pc, uint& data_addr, bool& w_enable, bool& e2, bool& e3, bool& HI_w, bool& LO_w)
 {
     uint next_pc=pc+4;
     int imm=int(this->C); imm<<=16; imm>>=16;
@@ -40,7 +40,7 @@ void Instruction::alu(uint rs, uint rt, bool& w_enable, uint& output, uint& HI, 
         output=~(rs&rt);
         w_enable=true;
     }else if(this->name=="slt"){
-        output=(rs<rt) ? 1 : 0;
+        output=(int(rs)<int(rt)) ? 1 : 0;
         w_enable=true;
     }else if(this->name=="sll"){
         output=rt<<this->C;
@@ -71,7 +71,7 @@ void Instruction::alu(uint rs, uint rt, bool& w_enable, uint& output, uint& HI, 
         LO_w=false;
         w_enable=false;
     }else if(this->name=="mfhi"){
-        output=HI;//should set flag for HILO error
+        output=HI;
         HI_w=true;
         w_enable=true;
     }else if(this->name=="mflo") {
@@ -142,7 +142,7 @@ void Instruction::alu(uint rs, uint rt, bool& w_enable, uint& output, uint& HI, 
         next_pc=(rs!=rt) ? pc+4+4*imm : pc+4;
         w_enable=false;
     }else if(this->name=="bgtz") {
-        next_pc=(rs>0) ? pc+4+4*imm : pc+4;
+        next_pc=(int(rs)>0) ? pc+4+4*imm : pc+4;
         w_enable=false;
     }else if(this->name=="j")    {
         next_pc=((pc+4)&0xf0000000)+(this->C<<2);
@@ -243,7 +243,7 @@ void Instruction::data_rw(uint data_addr, uint& to_write, std::vector<unsigned c
     }
 }
 
-void Instruction::write_reg(bool w_enable, bool& e1, uint to_write, uint HI, uint LO, std::vector<uint>& regs, std::stringstream& snap)
+void Instruction::write_reg(bool w_enable, uint to_write, uint HI, uint LO, std::vector<uint>& regs, std::stringstream& snap, bool& e1)
 {
     uint reg_num;
     if(this->name=="mult" || this->name=="multu"){

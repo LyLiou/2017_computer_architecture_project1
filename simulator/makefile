@@ -10,6 +10,8 @@ single_cycle: $(OBJS)
 	$(CC) -o single_cycle $(OBJS)
 %.o: $(HEADER) %.cpp
 	$(CC) $(FLAGS) -c $^
+debug: $(HEADER)
+	$(CC) -g $(FLAGS) $(wildcard *.cpp)
 
 clean:
-	rm -f single_cycle *.o *.rpt
+	rm -f single_cycle *.o *.rpt *.out
