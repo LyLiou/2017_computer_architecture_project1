@@ -159,7 +159,7 @@ void Instruction::data_rw(uint data_addr, uint& to_write, std::vector<unsigned c
         if(data_addr%4!=0){
             e5=true;
         }
-        if(data_addr+3>1023){
+        if(data_addr+3>1023 || data_addr>1023){
             e4=true;
         }
         if(e4||e5) return;
@@ -172,7 +172,7 @@ void Instruction::data_rw(uint data_addr, uint& to_write, std::vector<unsigned c
         if(data_addr%2!=0){
             e5=true;
         }
-        if(data_addr+1>1023){
+        if(data_addr+1>1023 || data_addr>1023){
             e4=true;
         }
         if(e4||e5) return;
@@ -187,7 +187,7 @@ void Instruction::data_rw(uint data_addr, uint& to_write, std::vector<unsigned c
         if(data_addr%2!=0){
             e5=true;
         }
-        if(data_addr+1>1023){
+        if(data_addr+1>1023 || data_addr>1023){
             e4=true;
         }
         if(e4||e5) return;
@@ -214,7 +214,7 @@ void Instruction::data_rw(uint data_addr, uint& to_write, std::vector<unsigned c
         if(data_addr%4!=0){
             e5=true;
         }
-        if(data_addr+3>1023){
+        if(data_addr+3>1023 || data_addr>1023){
             e4=true;
         }
         if(e4||e5) return;
@@ -226,7 +226,7 @@ void Instruction::data_rw(uint data_addr, uint& to_write, std::vector<unsigned c
         if(data_addr%2!=0){
             e5=true;
         }
-        if(data_addr+1>1023){
+        if(data_addr+1>1023 || data_addr>1023){
             e4=true;
         }
         if(e4||e5) return;
@@ -243,14 +243,12 @@ void Instruction::data_rw(uint data_addr, uint& to_write, std::vector<unsigned c
 
 void Instruction::write_reg(bool w_enable, uint to_write, uint HI, uint LO, std::vector<uint>& regs, std::stringstream& snap, bool& e1)
 {
-    uint reg_num;
+    uint reg_num=0;
     if(this->name=="mult" || this->name=="multu"){
         if(regs[32]!=HI){
-            //std::cout << "HI " << std::hex << HI << std::dec << "\n";
             snap << "$HI: 0x" << std::hex << std::setw(8) << std::setfill('0') << HI << std::dec << "\n";
         }
         if(regs[33]!=LO){
-            //std::cout << "LO " << std::hex << LO << std::dec << "\n";
             snap << "$LO: 0x" << std::hex << std::setw(8) << std::setfill('0') << LO << std::dec << "\n";
         }
         regs[32]=HI;
@@ -263,10 +261,9 @@ void Instruction::write_reg(bool w_enable, uint to_write, uint HI, uint LO, std:
         else if(this->type=='I') reg_num=this->rt.num;
         else if(this->name=="jal") reg_num=31;
         if(reg_num==0){
-            e1=true;
+            if(!(this->name=="sll" && this->rt.num==0 && this->C==0)) e1=true;
             return;
         }else if(regs[reg_num]!=to_write){
-            //std::cout << reg_num << " " << std::hex << to_write << std::dec << "\n";
             snap << "$" << std::setw(2) << std::setfill('0') << reg_num << ": 0x" << std::hex << std::setw(8) << std::uppercase << to_write << std::dec << "\n";
         }
         regs[reg_num]=to_write;

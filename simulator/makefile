@@ -2,7 +2,7 @@
 #make o3: use -O3
 #make clean: clean enough to submit
 CC = g++
-FLAGS = -std=c++11 -Wall
+FLAGS = -std=c++11 -Wall -O2
 HEADER = single_cycle.h
 OBJS := $(patsubst %.cpp, %.o, $(wildcard *.cpp))
 

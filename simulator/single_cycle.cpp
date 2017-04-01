@@ -55,6 +55,9 @@ int main()
     snp_rpt.open("snapshot.rpt");
     err_rpt.open("error_dump.rpt");
     
+    snp_rpt << snap.str();
+    snap.clear();
+    snap.str(std::string());
     while(1){
         //initialize error flag
         e1=false;
@@ -68,6 +71,7 @@ int main()
         //std::bitset<32> x(raw_inst);
         //std::cout << x << "\n";
         
+        if(cur_pc%4) break;
         raw_inst=iimage[cur_pc/4];//load from iimage by pc
         Instruction temp;
         cur_inst=temp;

@@ -15,13 +15,12 @@ void read_file(std::vector<unsigned char>& dimage, uint& sp, std::vector<uint>& 
         ifile.read(iimage_char, size);
         ifile.close();
         
-        //std::cout << "i size:" << size << "\n";
-        
         pc=0;
         for(int i=0;i<4;++i){
             pc<<=8;
             pc+=(uint)((unsigned char)(iimage_char[i]));
         }
+        if(pc%4) return;//add more information
         amt_inst=0;
         for(int i=4;i<8;++i){
             amt_inst<<=8;
@@ -36,7 +35,8 @@ void read_file(std::vector<unsigned char>& dimage, uint& sp, std::vector<uint>& 
                 temp<<=8;
                 temp+=(uint)((unsigned char)(iimage_char[j]));
             }
-            iimage[(pc+i-8)/4]=temp;
+            if(pc+i-8<1024) iimage[(pc+i-8)/4]=temp;//add more information
+            
         }
     }else std::cout << "Cannot open iimage.bin\n";
     
@@ -50,8 +50,6 @@ void read_file(std::vector<unsigned char>& dimage, uint& sp, std::vector<uint>& 
         dfile.read(dimage_char, size2);
         dfile.close();
         
-        //std::cout << "d size:" << size2 << "\n";
-        
         sp=0;
         for(int i=0;i<4;++i){
             sp<<=8;
@@ -63,18 +61,11 @@ void read_file(std::vector<unsigned char>& dimage, uint& sp, std::vector<uint>& 
             amt_data+=(uint)((unsigned char)(dimage_char[i]));
         }
         amt_data*=4;
-        //std::cout << "sp: " << sp << "\n";
-        //std::cout << "#data_byte: " << amt_data << "\n";
         dimage.clear();
         for(int i=0;i<1024;++i) dimage.push_back('\0');
         for(int i=8;i<size2;++i){
-            dimage[i-8]=(unsigned char)(dimage_char[i]);
+            if(i-8<1024) dimage[i-8]=(unsigned char)(dimage_char[i]);//add more information
         }
-        /*for(uint i=0;i<amt_data;++i){
-            std::bitset<8> x(dimage[i]);
-            std::cout << x << " ";
-            if(i%4==3) std::cout << "\n";
-        }*/
     }else std::cout << "Cannot open dimage.bin\n";
     
     return;
